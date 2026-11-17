@@ -1,6 +1,7 @@
 "use strict";
 
 const newYearTheme = document.querySelector('meta[name="NewYearTheme"]')?.content.trim().toUpperCase() === "TRUE";
+if (newYearTheme) document.body.dataset.newYearTheme = "TRUE";
 try { sessionStorage.setItem("mt-docs-new-year-theme", newYearTheme ? "TRUE" : "FALSE"); } catch {}
 
 const form = document.querySelector("#report-form");
