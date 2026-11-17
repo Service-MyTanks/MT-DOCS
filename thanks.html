@@ -8,7 +8,7 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; script-src 'self'; form-action https://api.staticforms.dev; object-src 'none'; base-uri 'self'">
   <title>Отправка отчёта · MT DOCS</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./styles.css?v=8">
   <script src="./thanks.js?v=1" defer></script>
 </head>
 <body class="success-layout">
@@ -16,23 +16,25 @@
     <a class="brand" href="https://usersoft-inc.github.io/MT-DOCS/" aria-label="Вернуться в MT DOCS"><span class="brand-mark">M<span>T</span></span><span>MT <strong>DOCS</strong><small>MYTANKS TEAM WORKSPACE</small></span></a>
     <div class="success-symbol"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 18-8-8 18-2-10-8-0Z M11 11l10-8"/></svg></div>
     <div class="eyebrow">ПОСЛЕДНИЙ ШАГ</div>
-    <h1>Отчёт подготовлен<span>.</span></h1>
+    <h1>Отчёт подготовлен.<br>Дежурство окончено<span>!</span></h1>
     <p>Нажмите кнопку, чтобы отправить отчёт и ссылки на скриншоты на почту команды.</p>
     <div class="notice" id="send-status" role="status">Загружаем подготовленный отчёт…</div>
-    <form id="send-report-form" action="https://api.staticforms.dev/submit" method="POST" target="_blank">
-      <input type="hidden" name="apiKey" value="sf_aca3770697761941dfd1a6f2">
-      <input type="hidden" name="redirectTo" value="https://usersoft-inc.github.io/MT-DOCS/thanks.html?sent=1">
-      <input type="text" name="honeypot" hidden tabindex="-1" autocomplete="off" aria-hidden="true">
-      <input type="hidden" name="name" id="send-name">
-      <input type="hidden" name="subject" id="send-subject">
-      <input type="hidden" name="message" id="send-message">
-      <input type="hidden" name="screenshot_1" id="send-screenshot-1">
-      <input type="hidden" name="screenshot_2" id="send-screenshot-2">
-      <input type="hidden" name="screenshot_3" id="send-screenshot-3">
-      <button class="button button-primary" id="send-report-button" type="submit" disabled>Отправить отчёт <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
-    </form>
+    <div class="success-actions">
+      <form id="send-report-form" action="https://api.staticforms.dev/submit" method="POST" target="_blank">
+        <input type="hidden" name="apiKey" value="sf_aca3770697761941dfd1a6f2">
+        <input type="hidden" name="redirectTo" value="https://usersoft-inc.github.io/MT-DOCS/thanks.html?sent=1">
+        <input type="text" name="honeypot" hidden tabindex="-1" autocomplete="off" aria-hidden="true">
+        <input type="hidden" name="name" id="send-name">
+        <input type="hidden" name="subject" id="send-subject">
+        <input type="hidden" name="message" id="send-message">
+        <input type="hidden" name="screenshot_1" id="send-screenshot-1">
+        <input type="hidden" name="screenshot_2" id="send-screenshot-2">
+        <input type="hidden" name="screenshot_3" id="send-screenshot-3">
+        <button class="button button-primary" id="send-report-button" type="submit" disabled>Отправить отчёт <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
+      </form>
+      <a class="button button-secondary" href="https://usersoft-inc.github.io/MT-DOCS/">Вернуться к форме <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a>
+    </div>
     <p>Черновик отчёта остаётся в этом браузере. Перед следующим отчётом очистите его или замените содержимое полей.</p>
-    <a class="button button-primary" href="https://usersoft-inc.github.io/MT-DOCS/">Вернуться к форме <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a>
   </main>
 </body>
 </html>
