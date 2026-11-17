@@ -23,6 +23,7 @@ const selectedFiles = () => fileInputs.flatMap((input) => [...input.files]);
 field("report-date").value = localDate;
 field("report-date").max = localDate;
 field("next-url").value = new URL("./thanks.html", window.location.href).href;
+field("form-url").value = new URL("./", window.location.href).href;
 
 function showToast(message) {
   const toast = field("toast");
@@ -57,6 +58,7 @@ function restoreDraft() {
       if (typeof draft[id] !== "string") continue;
       const input = field(id);
       input.value = input.maxLength > 0 ? draft[id].slice(0, input.maxLength) : draft[id];
+      if (input instanceof HTMLSelectElement && input.selectedIndex === -1) input.value = "";
     }
     setDraftStatus("Черновик восстановлен");
     showToast("Текст восстановлен. Выберите 3 скриншота заново.");
@@ -169,7 +171,7 @@ function refreshFilePreview(input) {
 }
 
 function updateProgress() {
-  const sectionValid = (id) => [...field(id).querySelectorAll("input, textarea")].every((input) => input.validity.valid);
+  const sectionValid = (id) => [...field(id).querySelectorAll("input, select, textarea")].every((input) => input.validity.valid);
   const states = {
     basics: sectionValid("basics"),
     work: sectionValid("work"),
