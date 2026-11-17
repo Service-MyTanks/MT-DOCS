@@ -1,5 +1,8 @@
 "use strict";
 
+const newYearTheme = document.querySelector('meta[name="NewYearTheme"]')?.content.trim().toUpperCase() === "TRUE";
+try { sessionStorage.setItem("mt-docs-new-year-theme", newYearTheme ? "TRUE" : "FALSE"); } catch {}
+
 const form = document.querySelector("#report-form");
 const draftKey = "mt-docs-draft-v1";
 const pendingReportKey = "mt-docs-pending-report-v1";

@@ -1,5 +1,11 @@
 "use strict";
 
+try {
+  if (sessionStorage.getItem("mt-docs-new-year-theme") === "TRUE") {
+    document.body.dataset.newYearTheme = "TRUE";
+  }
+} catch {}
+
 const pendingReportKey = "mt-docs-pending-report-v1";
 const form = document.querySelector("#send-report-form");
 const button = document.querySelector("#send-report-button");

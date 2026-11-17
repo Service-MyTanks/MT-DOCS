@@ -26,3 +26,12 @@ input[type=date]{width:100%;min-width:0;max-width:100%}
 .delivery-flight{position:absolute;z-index:2;top:50%;left:15px;width:25px;height:25px;color:var(--accent);animation:report-flight 2.8s cubic-bezier(.45,0,.35,1) infinite}
 @keyframes report-flight{0%{left:15px;transform:translateY(-50%) rotate(-18deg) scale(.75);opacity:0}12%{opacity:1}50%{transform:translateY(calc(-50% - 13px)) rotate(3deg) scale(1)}86%{left:calc(100% - 49px);transform:translateY(-50%) rotate(0) scale(.92);opacity:1}100%{left:calc(100% - 42px);transform:translateY(-50%) rotate(5deg) scale(.75);opacity:0}}
 @media(prefers-reduced-motion:reduce){.delivery-flight{animation:none;display:none}}
+
+/* New Year theme is opt-in through the NewYearTheme meta setting in index.html. */
+body[data-new-year-theme="TRUE"]{--accent:#e7c47c;--green:#8fc6a1}
+body[data-new-year-theme="TRUE"]::after{content:"";position:fixed;inset:-100px 0 0;z-index:80;pointer-events:none;opacity:.42;background-image:radial-gradient(2px 2px at 30px 40px,#fff 98%,transparent),radial-gradient(1.5px 1.5px at 110px 150px,#dce9f2 98%,transparent),radial-gradient(2px 2px at 190px 80px,#fff 98%,transparent),radial-gradient(1px 1px at 250px 200px,#dce9f2 98%,transparent);background-size:280px 240px;animation:new-year-snow 16s linear infinite}
+body[data-new-year-theme="TRUE"] .intro-strip,body[data-new-year-theme="TRUE"] .success-symbol{border-color:#4a5140;background:linear-gradient(110deg,#252a23,#1d2025 78%)}
+body[data-new-year-theme="TRUE"] .intro-icon,body[data-new-year-theme="TRUE"] .success-symbol{border-color:#4a5140;background-color:#292d24}
+body[data-new-year-theme="TRUE"] .button-primary{box-shadow:inset 0 0 0 1px #f1d69a}
+@keyframes new-year-snow{to{background-position:0 240px,0 480px,0 360px,0 600px}}
+@media(prefers-reduced-motion:reduce){body[data-new-year-theme="TRUE"]::after{animation:none}}
