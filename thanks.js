@@ -31,4 +31,5 @@ if (new URLSearchParams(window.location.search).get("sent") === "1") {
 form.addEventListener("submit", () => {
   button.disabled = true;
   status.textContent = "Открываем отправку отчёта в новой вкладке…";
+  window.alert("Подождите 5–10 секунд — после этого новую вкладку можно закрыть и вернуться на страницу благодарности.");
 });
