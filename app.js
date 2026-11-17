@@ -219,17 +219,6 @@ confirmSend.addEventListener("click", () => {
   field("email-subject").value = `MT DOCS | ${value("nickname").replace(/[\r\n]/g, " ")} | ${formatDate(value("report-date"))}`;
   field("report-body").value = reportText();
   const redirectUrl = field("staticforms-redirect").value;
-  const submissionWindow = window.open("about:blank", "_blank");
-  if (!submissionWindow) {
-    const error = field("send-error");
-    error.textContent = "Браузер заблокировал вкладку отправки. Разрешите всплывающие окна для сайта и попробуйте ещё раз.";
-    error.hidden = false;
-    error.scrollIntoView({ block: "nearest" });
-    return;
-  }
-  const submissionTarget = `staticforms-submit-${Date.now()}`;
-  submissionWindow.name = submissionTarget;
-  form.target = submissionTarget;
   HTMLFormElement.prototype.submit.call(form);
   window.location.replace(redirectUrl);
 });

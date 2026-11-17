@@ -9,7 +9,7 @@
   <title>Новый отчёт · MT DOCS</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="./styles.css?v=7">
-  <script src="./app.js?v=6" defer></script>
+  <script src="./app.js?v=7" defer></script>
 </head>
 <body>
   <svg class="svg-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
@@ -52,7 +52,7 @@
       <div class="intro-strip"><div><span class="intro-icon"><svg><use href="#i-doc"/></svg></span><span><strong>Ежедневный отчёт</strong><small>Единый шаблон для команды проекта</small></span></div><span class="time-estimate"><svg><use href="#i-clock"/></svg>~ 5 минут</span></div>
       <noscript><div class="notice">Для заполнения, проверки и отправки отчёта включите JavaScript в браузере.</div></noscript>
       <div class="content-grid">
-        <form id="report-form" action="https://api.staticforms.dev/submit" method="POST">
+        <form id="report-form" action="https://api.staticforms.dev/submit" method="POST" target="_blank">
           <input type="hidden" name="apiKey" id="staticforms-api-key" value="sf_aca3770697761941dfd1a6f2">
           <input type="hidden" name="redirectTo" value="https://usersoft-inc.github.io/MT-DOCS/thanks.html" id="staticforms-redirect">
           <input type="text" name="honeypot" hidden tabindex="-1" autocomplete="off" aria-hidden="true">
