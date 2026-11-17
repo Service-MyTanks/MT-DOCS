@@ -22,8 +22,7 @@ const selectedFiles = () => fileInputs.flatMap((input) => [...input.files]);
 
 field("report-date").value = localDate;
 field("report-date").max = localDate;
-field("next-url").value = new URL("./thanks.html", window.location.href).href;
-field("form-url").value = new URL("./", window.location.href).href;
+field("next-url").value = "https://usersoft-inc.github.io/MT-DOCS/thanks.html";
 
 function showToast(message) {
   const toast = field("toast");
@@ -250,6 +249,14 @@ form.addEventListener("submit", (event) => {
   openPreview({ ready: true });
 });
 
+function setSubmitting(active) {
+  submitting = active;
+  confirmSend.disabled = active;
+  confirmSend.textContent = active ? "Отправляем отчёт…" : "Отправить отчёт";
+  previewDialog.setAttribute("aria-busy", String(active));
+  previewDialog.querySelector("[data-close]").disabled = active;
+}
+
 confirmSend.addEventListener("click", () => {
   if (submitting) return;
   validateFields();
@@ -261,16 +268,16 @@ confirmSend.addEventListener("click", () => {
   saveDraft();
   field("email-subject").value = `MT DOCS | ${value("nickname").replace(/[\r\n]/g, " ")} | ${formatDate(value("report-date"))}`;
   field("report-body").value = reportText();
-  submitting = true;
-  confirmSend.disabled = true;
-  confirmSend.textContent = "Переходим в FormSubmit…";
+  setSubmitting(true);
   HTMLFormElement.prototype.submit.call(form);
 });
 
+previewDialog.addEventListener("cancel", (event) => {
+  if (submitting) event.preventDefault();
+});
+
 window.addEventListener("pageshow", () => {
-  submitting = false;
-  confirmSend.disabled = false;
-  confirmSend.textContent = "Перейти к отправке";
+  setSubmitting(false);
   validateFields();
   updateProgress();
 });
