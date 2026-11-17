@@ -15,6 +15,8 @@ const localDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStar
 let saveTimer;
 let toastTimer;
 let templatePreview = false;
+let screenshotMode = "";
+let preservedScreenshotLinks = null;
 
 const field = (id) => document.getElementById(id);
 const value = (id) => field(id).value.trim();
@@ -45,7 +47,12 @@ function setDraftStatus(message) {
 function saveDraft() {
   clearTimeout(saveTimer);
   try {
-    localStorage.setItem(draftKey, JSON.stringify(Object.fromEntries(fieldIds.map((id) => [id, field(id).value]))));
+    const draft = Object.fromEntries(fieldIds.map((id) => [id, field(id).value]));
+    draft.screenshotMode = screenshotMode;
+    if (screenshotMode && preservedScreenshotLinks) {
+      [1, 2, 3].forEach((number) => { draft[`screenshot-${number}`] = preservedScreenshotLinks[number - 1]; });
+    }
+    localStorage.setItem(draftKey, JSON.stringify(draft));
     setDraftStatus("Черновик сохранён");
   } catch {
     setDraftStatus("Автосохранение недоступно");
@@ -64,6 +71,9 @@ function restoreDraft() {
       input.value = input.maxLength > 0 ? draft[id].slice(0, input.maxLength) : draft[id];
       if (input instanceof HTMLSelectElement && input.selectedIndex === -1) input.value = "";
     }
+    screenshotMode = ["group", "blocked"].includes(draft.screenshotMode) ? draft.screenshotMode : "";
+    preservedScreenshotLinks = [1, 2, 3].map((number) => value(`screenshot-${number}`));
+    updateScreenshotFields();
     setDraftStatus("Черновик восстановлен");
     showToast("Черновик восстановлен.");
   } catch {
@@ -81,10 +91,37 @@ function formatDate(date) {
   return parts.length === 3 ? `${parts[2]}.${parts[1]}.${parts[0]}` : "[Дата]";
 }
 
+function updateScreenshotFields() {
+  const groupOption = field("screenshots-to-group");
+  const blockedOption = field("screenshots-no-hosting");
+  groupOption.checked = screenshotMode === "group";
+  blockedOption.checked = screenshotMode === "blocked";
+  const message = screenshotMode === "group" ? 'Скриншоты направлены в "ЕЖЕДНЕВНЫЕ ОТЧЁТЫ"' : screenshotMode === "blocked" ? "Заблокировано РКН или отсутствует доступ" : "";
+  for (const number of [1, 2, 3]) {
+    const input = field(`screenshot-${number}`);
+    input.disabled = Boolean(screenshotMode);
+    if (screenshotMode) input.value = message;
+    else if (preservedScreenshotLinks) input.value = preservedScreenshotLinks[number - 1];
+  }
+  field("upload-hint").textContent = screenshotMode === "group" ? 'Скриншоты направьте в группу «ЕЖЕДНЕВНЫЕ ОТЧЁТЫ». Ссылки добавлять не нужно.' : screenshotMode === "blocked" ? "В отчёт будет добавлена указанная причина отсутствия ссылок." : "Вставьте прямые ссылки с доступом для получателя. Подойдут публичные ссылки на изображения или страницы просмотра файлов.";
+}
+
+function setScreenshotMode(mode) {
+  if (!screenshotMode && mode) preservedScreenshotLinks = [1, 2, 3].map((number) => value(`screenshot-${number}`));
+  screenshotMode = mode;
+  updateScreenshotFields();
+  validateFields();
+  updateProgress();
+  setDraftStatus("Сохраняем черновик…");
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveDraft, 350);
+}
+
 function reportText(template = false) {
   const data = (id, placeholder) => template ? placeholder : value(id) || placeholder;
   const list = (id, placeholder, empty) => template ? placeholder : numberedList(value(id), empty);
-  const screenshots = template ? "1. [Ссылка на скриншот 1]\n2. [Ссылка на скриншот 2]\n3. [Ссылка на скриншот 3]" : [1, 2, 3].map((number) => `${number}. ${value(`screenshot-${number}`)}`).join("\n");
+  const screenshotStatus = screenshotMode === "group" ? 'Скриншоты направлены в "ЕЖЕДНЕВНЫЕ ОТЧЁТЫ"' : screenshotMode === "blocked" ? "Заблокировано РКН или отсутствует доступ" : "";
+  const screenshots = template ? "1. [Ссылка на скриншот 1]\n2. [Ссылка на скриншот 2]\n3. [Ссылка на скриншот 3]" : screenshotStatus || [1, 2, 3].map((number) => `${number}. ${value(`screenshot-${number}`)}`).join("\n");
   return [
     "ЕЖЕДНЕВНЫЙ ОТЧЁТ · MYTANKS",
     "",
@@ -121,8 +158,8 @@ function validateFields() {
     input.setCustomValidity(input.value && !text ? "Введите текст, а не только пробелы или номера пунктов." : "");
   }
   const screenshotIds = ["screenshot-1", "screenshot-2", "screenshot-3"];
-  const invalidScreenshot = screenshotIds.find((id) => !isHttpUrl(value(id)));
-  for (const id of screenshotIds) field(id).setCustomValidity(isHttpUrl(value(id)) ? "" : "Укажите полную ссылку, начинающуюся с https:// или http://.");
+  const invalidScreenshot = screenshotMode ? "" : screenshotIds.find((id) => !isHttpUrl(value(id)));
+  for (const id of screenshotIds) field(id).setCustomValidity(screenshotMode || isHttpUrl(value(id)) ? "" : "Укажите полную ссылку, начинающуюся с https:// или http://.");
   const extraLinks = value("links").split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
   const invalidExtraLink = extraLinks.find((link) => !isHttpUrl(link));
   field("links").setCustomValidity(invalidExtraLink ? "Укажите по одной полной ссылке http:// или https:// на строку, без пробелов." : "");
@@ -163,7 +200,8 @@ function openPreview({ ready = false, template = false } = {}) {
   field("preview-title").textContent = template ? "Шаблон ежедневного отчёта" : "Ваш ежедневный отчёт";
   field("preview-description").textContent = template ? "Все 8 пунктов исходного шаблона. Каждый список нумеруется автоматически." : "Так будет выглядеть отчёт и ссылки на скриншоты.";
   field("preview-text").textContent = reportText(template);
-  const chips = template ? [] : [1, 2, 3].map((number) => {
+  const screenshotStatus = screenshotMode === "group" ? 'Скриншоты направлены в "ЕЖЕДНЕВНЫЕ ОТЧЁТЫ"' : screenshotMode === "blocked" ? "Заблокировано РКН или отсутствует доступ" : "";
+  const chips = template ? [] : screenshotStatus ? [screenshotStatus] : [1, 2, 3].map((number) => {
     const chip = document.createElement("span");
     chip.className = "attachment-chip";
     const url = value(`screenshot-${number}`);
@@ -179,7 +217,14 @@ function openPreview({ ready = false, template = false } = {}) {
     }
     return chip;
   });
-  field("preview-attachments").replaceChildren(...chips);
+  const attachmentChips = chips.map((chip) => {
+    if (typeof chip !== "string") return chip;
+    const statusChip = document.createElement("span");
+    statusChip.className = "attachment-chip";
+    statusChip.textContent = chip;
+    return statusChip;
+  });
+  field("preview-attachments").replaceChildren(...attachmentChips);
   confirmSend.hidden = !ready;
   field("back-to-form").hidden = ready;
   field("send-notice").hidden = !ready;
@@ -195,6 +240,13 @@ form.addEventListener("input", (event) => {
     clearTimeout(saveTimer);
     saveTimer = setTimeout(saveDraft, 350);
   }
+});
+
+field("screenshots-to-group").addEventListener("change", (event) => {
+  setScreenshotMode(event.target.checked ? "group" : "");
+});
+field("screenshots-no-hosting").addEventListener("change", (event) => {
+  setScreenshotMode(event.target.checked ? "blocked" : "");
 });
 
 form.addEventListener("submit", (event) => {
@@ -283,6 +335,9 @@ field("confirm-clear").addEventListener("click", () => {
   let removed = true;
   try { localStorage.removeItem(draftKey); } catch { removed = false; }
   form.reset();
+  screenshotMode = "";
+  preservedScreenshotLinks = null;
+  updateScreenshotFields();
   field("report-date").value = localDate;
   validateFields();
   updateProgress();

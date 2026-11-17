@@ -9,8 +9,8 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' blob:; style-src 'self'; script-src 'self'; connect-src 'none'; form-action https://api.staticforms.dev; base-uri 'self'; object-src 'none'">
   <title>Новый отчёт · MT DOCS</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./styles.css?v=13">
-  <script src="./app.js?v=12" defer></script>
+  <link rel="stylesheet" href="./styles.css?v=14">
+  <script src="./app.js?v=13" defer></script>
 </head>
 <body>
   <svg class="svg-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
@@ -103,7 +103,11 @@
                 <small id="position-hint">Выберите вашу должность. Она отобразится в письме</small>
               </div>
               <div class="field-row"><div class="field"><label for="online-minutes">Время онлайн <span>*</span></label><div class="input-with-unit"><input type="number" id="online-minutes" min="0" max="1440" step="1" placeholder="0" inputmode="numeric" required><span>минут</span></div><small>Общее время за отчётный день</small></div><div class="field"><label for="report-count">Ответы на репорты <span>*</span></label><div class="input-with-unit"><input type="number" id="report-count" min="0" max="99999" step="1" placeholder="0" inputmode="numeric" required><span>ответов</span></div><small>Укажите 0, если ответов не было</small></div></div>
-              <div class="upload-heading"><label for="screenshot-1">Ссылки на скриншоты онлайна <span>*</span></label><span>3 ссылки</span></div>
+              <div class="upload-heading"><label for="screenshot-1">Скриншоты <span>*</span></label><span>3 ссылки</span></div>
+              <div class="screenshot-options" role="group" aria-label="Как передать скриншоты">
+                <label class="screenshot-option"><input type="checkbox" id="screenshots-to-group"><span>Отправлю скриншоты в группу</span></label>
+                <label class="screenshot-option"><input type="checkbox" id="screenshots-no-hosting"><span>Отсутствует доступ к сторонним файлообменникам</span></label>
+              </div>
               <div class="field screenshot-link-field"><label for="screenshot-1">Скриншот 1 <span>*</span></label><input type="url" id="screenshot-1" name="screenshot_1" maxlength="2048" placeholder="https://…" inputmode="url" autocomplete="url" required aria-describedby="upload-hint file-error"></div>
               <div class="field screenshot-link-field"><label for="screenshot-2">Скриншот 2 <span>*</span></label><input type="url" id="screenshot-2" name="screenshot_2" maxlength="2048" placeholder="https://…" inputmode="url" autocomplete="url" required aria-describedby="upload-hint file-error"></div>
               <div class="field screenshot-link-field"><label for="screenshot-3">Скриншот 3 <span>*</span></label><input type="url" id="screenshot-3" name="screenshot_3" maxlength="2048" placeholder="https://…" inputmode="url" autocomplete="url" required aria-describedby="upload-hint file-error"></div>
@@ -144,7 +148,7 @@
     </main>
   </div>
 
-  <dialog id="service-warning" aria-labelledby="service-warning-title" class="service-warning"><div class="dialog-heading"><div><span class="eyebrow">СЛУЖЕБНОЕ ПРЕДУПРЕЖДЕНИЕ</span><h2 id="service-warning-title">Внимание</h2></div><span class="service-warning-mark" aria-hidden="true">!</span></div><div class="dialog-body"><p class="service-warning-copy">Данный сайт является служебный. Слив данных, скриншотов, текста и так далее карается перманентным снятием с должности. Используйте сервис по прямому назначению. Только для отчётности!</p></div><div class="dialog-actions"><button type="button" class="button button-primary" data-close>Понятно, перейти к отчёту</button></div></dialog>
+  <dialog id="service-warning" aria-labelledby="service-warning-title" class="service-warning"><div class="dialog-heading"><div><span class="eyebrow">СЛУЖЕБНОЕ ПРЕДУПРЕЖДЕНИЕ</span><h2 id="service-warning-title">Внимание</h2></div><span class="service-warning-mark" aria-hidden="true">!</span></div><div class="dialog-body"><p class="service-warning-copy">Данный сайт является служебным. Слив данных, скриншотов, текста и так далее карается перманентным снятием с должности. Используйте сервис по прямому назначению. Только для отчётности!</p></div><div class="dialog-actions"><button type="button" class="button button-primary" data-close>Понятно, перейти к отчёту</button></div></dialog>
 
   <dialog id="preview-dialog" aria-labelledby="preview-title"><div class="dialog-heading"><div><span class="eyebrow">ПЕРЕД ОТПРАВКОЙ</span><h2 id="preview-title">Ваш ежедневный отчёт</h2></div><button type="button" class="icon-button" data-close aria-label="Закрыть предпросмотр"><svg><use href="#i-close"/></svg></button></div><div class="dialog-body"><p class="dialog-description" id="preview-description">Так будет выглядеть отчёт и три ссылки на скриншоты.</p><pre id="preview-text"></pre><div class="preview-attachments" id="preview-attachments"></div><p class="notice compact" id="send-notice">После подтверждения отчёт будет передан Static Forms обычной POST-формой.</p><p class="field-error" id="send-error" role="alert" hidden></p></div><div class="dialog-actions"><button type="button" class="button button-secondary" id="download-report"><svg><use href="#i-download"/></svg>Скачать .txt</button><button type="button" class="button button-primary" id="confirm-send">Перейти к отправке<svg><use href="#i-arrow"/></svg></button><button type="button" class="button button-primary" id="back-to-form" data-close hidden>Продолжить заполнение</button></div></dialog>
 
