@@ -2,6 +2,7 @@
 
 const form = document.querySelector("#report-form");
 const draftKey = "mt-docs-draft-v1";
+const pendingReportKey = "mt-docs-pending-report-v1";
 const fieldIds = ["report-date", "nickname", "position", "online-minutes", "report-count", "screenshot-1", "screenshot-2", "screenshot-3", "game-work", "community-work", "forum-work", "key-skills", "links"];
 const previewDialog = document.querySelector("#preview-dialog");
 const confirmSend = document.querySelector("#confirm-send");
@@ -219,8 +220,20 @@ confirmSend.addEventListener("click", () => {
   field("email-subject").value = `MT DOCS | ${value("nickname").replace(/[\r\n]/g, " ")} | ${formatDate(value("report-date"))}`;
   field("report-body").value = reportText();
   const redirectUrl = field("staticforms-redirect").value;
-  HTMLFormElement.prototype.submit.call(form);
-  window.location.replace(redirectUrl);
+  try {
+    sessionStorage.setItem(pendingReportKey, JSON.stringify({
+      name: value("nickname"),
+      subject: field("email-subject").value,
+      message: field("report-body").value,
+      screenshots: [1, 2, 3].map((number) => value(`screenshot-${number}`)),
+    }));
+    window.location.assign(redirectUrl);
+  } catch {
+    const error = field("send-error");
+    error.textContent = "Не удалось подготовить отчёт к переходу. Разрешите хранилище сайта в браузере и попробуйте ещё раз.";
+    error.hidden = false;
+    error.scrollIntoView({ block: "nearest" });
+  }
 });
 
 window.addEventListener("pageshow", () => {
