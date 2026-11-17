@@ -9,7 +9,6 @@ const today = new Date();
 const localDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
 let saveTimer;
 let toastTimer;
-let submitting = false;
 let templatePreview = false;
 
 const field = (id) => document.getElementById(id);
@@ -202,14 +201,6 @@ form.addEventListener("submit", (event) => {
   openPreview({ ready: true });
 });
 
-function setSubmitting(active) {
-  submitting = active;
-  confirmSend.disabled = active;
-  confirmSend.textContent = active ? "Переходим к отправке…" : "Отправить отчёт";
-  previewDialog.setAttribute("aria-busy", String(active));
-  previewDialog.querySelector("[data-close]").disabled = active;
-}
-
 confirmSend.addEventListener("click", () => {
   if (submitting) return;
   validateFields();
@@ -228,16 +219,23 @@ confirmSend.addEventListener("click", () => {
   }
   field("email-subject").value = `MT DOCS | ${value("nickname").replace(/[\r\n]/g, " ")} | ${formatDate(value("report-date"))}`;
   field("report-body").value = reportText();
+  const redirectUrl = field("staticforms-redirect").value;
+  const submissionWindow = window.open("about:blank", "_blank");
+  if (!submissionWindow) {
+    const error = field("send-error");
+    error.textContent = "Браузер заблокировал вкладку отправки. Разрешите всплывающие окна для сайта и попробуйте ещё раз.";
+    error.hidden = false;
+    error.scrollIntoView({ block: "nearest" });
+    return;
+  }
+  const submissionTarget = `staticforms-submit-${Date.now()}`;
+  submissionWindow.name = submissionTarget;
+  form.target = submissionTarget;
   HTMLFormElement.prototype.submit.call(form);
-  window.location.assign(field("staticforms-redirect").value);
-});
-
-previewDialog.addEventListener("cancel", (event) => {
-  if (submitting) event.preventDefault();
+  window.location.replace(redirectUrl);
 });
 
 window.addEventListener("pageshow", () => {
-  setSubmitting(false);
   validateFields();
   updateProgress();
 });
