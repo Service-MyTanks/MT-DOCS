@@ -202,7 +202,6 @@ form.addEventListener("submit", (event) => {
 });
 
 confirmSend.addEventListener("click", () => {
-  if (submitting) return;
   validateFields();
   if (!form.checkValidity()) {
     previewDialog.close();
