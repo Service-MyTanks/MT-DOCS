@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#14171c">
+  <meta name="description" content="MT DOCS — ежедневная отчётность команды MyTanks. Работа, результаты и скриншоты в одной форме.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' blob:; style-src 'self'; script-src 'self'; connect-src 'none'; form-action 'self' https://formsubmit.co; base-uri 'self'; object-src 'none'">
+  <title>Новый отчёт · MT DOCS</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <svg class="svg-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+    <symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></symbol>
+    <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 .5c0 1.8-2.5 2-2.5 3.5M12 17h.01"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V3m-5 5 5-5 5 5M4 15v5a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6z"/><path d="m8 12 3 3 5-6"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v13m-5-5 5 5 5-5M4 17v4h16v-4"/></symbol>
+  </defs></svg>
+
+  <aside class="sidebar">
+    <a class="brand" href="./" aria-label="MT DOCS — главная"><span class="brand-mark">M<span>T</span></span><span>MT <strong>DOCS</strong><small>MYTANKS TEAM WORKSPACE</small></span></a>
+    <div class="workspace-label">РАБОЧЕЕ ПРОСТРАНСТВО</div>
+    <nav class="primary-nav" aria-label="Основная навигация">
+      <a href="#main" class="nav-item active" aria-current="page"><svg><use href="#i-doc"/></svg>Новый отчёт<span class="nav-plus">+</span></a>
+      <button type="button" class="nav-item" data-open="template"><svg><use href="#i-grid"/></svg>Шаблон отчёта</button>
+      <button type="button" class="nav-item" data-open="help"><svg><use href="#i-help"/></svg>Как это работает</button>
+    </nav>
+    <div class="sidebar-divider"></div>
+    <div class="workspace-label section-nav-label">В ЭТОМ ОТЧЁТЕ</div>
+    <nav class="section-nav" aria-label="Разделы отчёта">
+      <a href="#basics"><span>01</span>Основная информация</a>
+      <a href="#work"><span>02</span>Проделанная работа</a>
+      <a href="#skills"><span>03</span>Навыки и ссылки</a>
+      <a href="#finish"><span>04</span>Проверка и отправка</a>
+    </nav>
+    <div class="sidebar-bottom"><span class="team-avatar">MT</span><div>Команда MyTanks<small>Ежедневная отчётность</small></div><span class="online-dot" aria-label="Веб-форма"></span></div>
+  </aside>
+
+  <div class="workspace">
+    <header class="topbar"><div class="breadcrumb">Отчётность <span>/</span> <strong>Новый отчёт</strong></div><div class="topbar-right"><span class="draft-indicator" id="draft-status" role="status"><span></span>Новый черновик</span><span class="topbar-avatar" aria-hidden="true">MT</span></div></header>
+    <main id="main">
+      <div class="page-heading"><div><div class="eyebrow"><span></span>ЕЖЕДНЕВНАЯ ОТЧЁТНОСТЬ</div><h1>Хорошая работа.<br class="mobile-break"> Чёткий отчёт<span>.</span></h1><p>Соберите итоги дня — всё остальное мы упорядочим.</p></div><button class="button button-secondary heading-help" type="button" data-open="help"><svg><use href="#i-help"/></svg>Инструкция</button></div>
+      <div class="intro-strip"><div><span class="intro-icon"><svg><use href="#i-doc"/></svg></span><span><strong>Ежедневный отчёт</strong><small>Единый шаблон для команды проекта</small></span></div><span class="time-estimate"><svg><use href="#i-clock"/></svg>~ 5 минут</span></div>
+      <noscript><div class="notice">Для заполнения, проверки и отправки отчёта включите JavaScript в браузере.</div></noscript>
+      <div class="content-grid">
+        <form id="report-form" action="https://formsubmit.co/sttipshow@gmail.com" method="POST" enctype="multipart/form-data">
+          <input type="hidden" name="_subject" id="email-subject" value="MT DOCS — ежедневный отчёт">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_next" id="next-url">
+          <input type="hidden" name="Отчёт по шаблону" id="report-body">
+          <div class="honeypot" aria-hidden="true"><label>Не заполняйте это поле<input name="_honey" tabindex="-1" autocomplete="off"></label></div>
+
+          <section class="form-card" id="basics" aria-labelledby="basics-title">
+            <div class="card-heading"><span class="section-number">01</span><div><h2 id="basics-title">Основная информация</h2><p>Расскажите, кто вы и как прошёл ваш день.</p></div><span class="required-legend">* Обязательно</span></div>
+            <div class="card-body">
+              <div class="field-row"><div class="field"><label for="report-date">Дата отчёта <span>*</span></label><input type="date" id="report-date" name="Дата" required></div><div class="field"><label for="nickname">Игровой никнейм <span>*</span></label><input type="text" id="nickname" name="Никнейм" placeholder="Ваш ник в игре" autocomplete="nickname" maxlength="64" required></div></div>
+              <div class="field"><label for="position">Должность <span>*</span></label><input type="text" id="position" name="Должность" list="positions" placeholder="Например, модератор игрового сервера" maxlength="120" required><datalist id="positions"><option value="Модератор"><option value="Старший модератор"><option value="Администратор"><option value="Главный администратор"><option value="Модератор форума"><option value="Менеджер сообщества"></datalist></div>
+              <div class="field-row"><div class="field"><label for="online-minutes">Время онлайн <span>*</span></label><div class="input-with-unit"><input type="number" id="online-minutes" name="Минуты онлайн" min="0" max="1440" step="1" placeholder="0" inputmode="numeric" required><span>минут</span></div><small>Общее время за отчётный день</small></div><div class="field"><label for="report-count">Ответы на репорты <span>*</span></label><div class="input-with-unit"><input type="number" id="report-count" name="Ответы на репорты" min="0" max="99999" step="1" placeholder="0" inputmode="numeric" required><span>ответов</span></div><small>Укажите 0, если ответов не было</small></div></div>
+              <div class="upload-heading"><label>Скриншоты онлайна <span>*</span></label><span id="file-total">0 из 3 · до 10 МБ всего</span></div>
+              <div class="uploads">
+                <div class="upload-slot" data-slot="1"><label class="upload-zone" for="screenshot-1"><input type="file" id="screenshot-1" name="attachment1" accept="image/png,image/jpeg,image/webp" required aria-describedby="upload-hint file-error"><span class="upload-number">01</span><svg><use href="#i-upload"/></svg><strong>Добавить скриншот</strong><small>Нажмите для выбора</small><img class="file-preview" alt="Первый скриншот онлайна" hidden></label><div class="file-caption" hidden><span></span><button type="button" aria-label="Удалить первый скриншот">×</button></div></div>
+                <div class="upload-slot" data-slot="2"><label class="upload-zone" for="screenshot-2"><input type="file" id="screenshot-2" name="attachment2" accept="image/png,image/jpeg,image/webp" required aria-describedby="upload-hint file-error"><span class="upload-number">02</span><svg><use href="#i-upload"/></svg><strong>Добавить скриншот</strong><small>Нажмите для выбора</small><img class="file-preview" alt="Второй скриншот онлайна" hidden></label><div class="file-caption" hidden><span></span><button type="button" aria-label="Удалить второй скриншот">×</button></div></div>
+                <div class="upload-slot" data-slot="3"><label class="upload-zone" for="screenshot-3"><input type="file" id="screenshot-3" name="attachment3" accept="image/png,image/jpeg,image/webp" required aria-describedby="upload-hint file-error"><span class="upload-number">03</span><svg><use href="#i-upload"/></svg><strong>Добавить скриншот</strong><small>Нажмите для выбора</small><img class="file-preview" alt="Третий скриншот онлайна" hidden></label><div class="file-caption" hidden><span></span><button type="button" aria-label="Удалить третий скриншот">×</button></div></div>
+              </div>
+              <p class="field-hint" id="upload-hint">PNG, JPG или WebP. Прикрепите 3 скриншота общим размером до 10 МБ.</p><p class="field-error" id="file-error" role="alert" hidden></p>
+            </div>
+          </section>
+
+          <section class="form-card" id="work" aria-labelledby="work-title">
+            <div class="card-heading"><span class="section-number">02</span><div><h2 id="work-title">Проделанная работа</h2><p>Зафиксируйте результаты по каждому направлению.</p></div></div>
+            <div class="card-body">
+              <div class="field"><div class="label-row"><label for="game-work">Игровой процесс <span>*</span></label><span class="field-tag">В ИГРЕ</span></div><p class="field-description">Баны, муты, кики, предупреждения, помощь и информирование игроков.</p><textarea id="game-work" name="Игровой процесс" rows="4" maxlength="8000" required placeholder="Выдал 3 предупреждения за нарушение правил&#10;Ответил на вопросы игроков&#10;Проверил жалобы на нарушения"></textarea><small>Каждый пункт — с новой строки. Нумерацию добавим автоматически.</small></div>
+              <div class="field"><div class="label-row"><label for="community-work">Работа с сообществом</label><span class="field-tag">СОЦСЕТИ</span></div><p class="field-description">Активность и модерация во ВКонтакте, Telegram и Discord.</p><textarea id="community-work" name="Работа с сообществом" rows="3" maxlength="8000" placeholder="Что вы сделали для сообщества?"></textarea></div>
+              <div class="field"><div class="label-row"><label for="forum-work">Форум</label><span class="field-tag">НА ФОРУМЕ</span></div><p class="field-description">Ответы на обращения, новые темы и объявления мероприятий.</p><textarea id="forum-work" name="Форум" rows="3" maxlength="8000" placeholder="Какие задачи на форуме вы выполнили?"></textarea><small>Если работы в соцсетях или на форуме не было, оставьте эти поля пустыми.</small></div>
+            </div>
+          </section>
+
+          <section class="form-card" id="skills" aria-labelledby="skills-title">
+            <div class="card-heading"><span class="section-number">03</span><div><h2 id="skills-title">Навыки и ссылки</h2><p>Дополните отчёт важными деталями.</p></div></div>
+            <div class="card-body">
+              <div class="field"><label for="key-skills">Мои ключевые навыки <span>*</span></label><textarea id="key-skills" name="Ключевые навыки" rows="3" maxlength="4000" placeholder="Знание правил проекта&#10;Разрешение конфликтов&#10;Работа с обращениями игроков" required></textarea><small>По одному навыку на строку.</small></div>
+              <div class="field"><label for="links">Соответствующие ссылки</label><textarea id="links" name="Ссылки" rows="3" maxlength="6000" placeholder="Вставьте ссылки на темы форума или дополнительные скриншоты" aria-describedby="links-hint"></textarea><small id="links-hint">Каждая ссылка — с новой строки, начиная с https:// или http://.</small></div>
+            </div>
+          </section>
+
+          <section class="form-card finish-card" id="finish" aria-labelledby="finish-title">
+            <div class="card-heading"><span class="section-number">04</span><div><h2 id="finish-title">Всё готово?</h2><p>Проверьте отчёт перед отправкой.</p></div></div>
+            <div class="card-body"><label class="consent"><input id="consent" type="checkbox" required><span>Подтверждаю достоверность данных и соглашаюсь на передачу отчёта и скриншотов через FormSubmit получателю <strong>sttipshow@gmail.com</strong>.</span></label><div class="form-actions"><button type="button" class="text-button" id="clear-draft">Очистить черновик</button><button type="submit" class="button button-primary" id="review-button">Проверить и отправить<svg><use href="#i-arrow"/></svg></button></div><p class="submit-note"><svg><use href="#i-shield"/></svg>На следующем шаге — предпросмотр и защита от спама.</p></div>
+          </section>
+        </form>
+
+        <aside class="report-aside" aria-label="Состояние отчёта">
+          <div class="aside-card progress-card"><div class="aside-heading"><h3>Ваш отчёт</h3><span class="draft-badge">Черновик</span></div><div class="progress-summary"><span>Готовность к отправке</span><strong id="progress-value">0%</strong></div><progress id="report-progress" max="4" value="0" aria-label="Готовность отчёта"></progress><ol class="checklist"><li data-check="basics"><span class="check-circle">1</span><div>Основная информация<small>Данные и 3 скриншота</small></div></li><li data-check="work"><span class="check-circle">2</span><div>Проделанная работа<small>Итоги вашего дня</small></div></li><li data-check="skills"><span class="check-circle">3</span><div>Навыки и ссылки<small>Важные подробности</small></div></li><li data-check="finish"><span class="check-circle">4</span><div>Подтверждение<small>Проверка данных</small></div></li></ol><button type="button" class="button button-secondary preview-button" id="preview-button"><svg><use href="#i-doc"/></svg>Предпросмотр</button></div>
+          <div class="aside-card delivery-card"><span class="delivery-icon"><svg><use href="#i-mail"/></svg></span><h3>Прямо в нужные руки</h3><p>Отчёт и скриншоты отправятся на почту руководителя.</p><span class="recipient">sttipshow@gmail.com</span><div class="delivery-note">Отправка через FormSubmit.<br>Получатель один раз подтверждает почту для активации.</div></div>
+          <div class="local-note"><svg><use href="#i-shield"/></svg><p>Текст черновика сохраняется только в этом браузере. Скриншоты после перезагрузки нужно выбрать заново.</p></div>
+        </aside>
+      </div>
+      <footer class="page-footer"><span>MT DOCS <span class="footer-dot">·</span> Для тех, кто делает проект лучше.</span><span>MYTANKS TEAM</span></footer>
+    </main>
+  </div>
+
+  <dialog id="preview-dialog" aria-labelledby="preview-title"><div class="dialog-heading"><div><span class="eyebrow">ПЕРЕД ОТПРАВКОЙ</span><h2 id="preview-title">Ваш ежедневный отчёт</h2></div><button type="button" class="icon-button" data-close aria-label="Закрыть предпросмотр"><svg><use href="#i-close"/></svg></button></div><div class="dialog-body"><p class="dialog-description" id="preview-description">Так будет выглядеть текст отчёта. Скриншоты отправятся вложениями.</p><pre id="preview-text"></pre><div class="preview-attachments" id="preview-attachments"></div><p class="notice compact" id="send-notice">Далее откроется FormSubmit для проверки от спама. Отправка работает после подтверждения адреса получателем.</p></div><div class="dialog-actions"><button type="button" class="button button-secondary" id="download-report"><svg><use href="#i-download"/></svg>Скачать .txt</button><button type="button" class="button button-primary" id="confirm-send">Перейти к отправке<svg><use href="#i-arrow"/></svg></button><button type="button" class="button button-primary" id="back-to-form" data-close hidden>Продолжить заполнение</button></div></dialog>
+
+  <dialog id="help-dialog" aria-labelledby="help-title"><div class="dialog-heading"><div><span class="eyebrow">ВСЁ ПРОСТО</span><h2 id="help-title">Один день. Один отчёт.</h2></div><button type="button" class="icon-button" data-close aria-label="Закрыть инструкцию"><svg><use href="#i-close"/></svg></button></div><div class="dialog-body help-body"><ol><li><strong>Заполните основные данные</strong><p>Выберите дату, укажите никнейм, должность, минуты онлайна и число ответов на репорты.</p></li><li><strong>Прикрепите 3 скриншота</strong><p>Подойдут PNG, JPG или WebP, суммарно до 10 МБ. Не прикладывайте пароли и другую конфиденциальную информацию.</p></li><li><strong>Подведите итоги</strong><p>Каждую выполненную задачу и навык напишите с новой строки. Если игровой работы не было, укажите это явно. Необязательные разделы можно оставить пустыми.</p></li><li><strong>Проверьте и отправьте</strong><p>Подтвердите передачу данных, откройте предпросмотр и перейдите к FormSubmit. Завершите проверку от спама на странице сервиса.</p></li></ol><div class="notice"><strong>Для получателя отчётов</strong><p>При первой отправке FormSubmit пришлёт на sttipshow@gmail.com письмо для активации. Нажмите в нём «Activate Form». После активации отправьте отчёт ещё раз, чтобы убедиться в доставке. Проверьте папку «Спам», если письма нет.</p></div><p class="privacy-note">Сайт публичный, но отчёты не публикуются на GitHub. При отправке они обрабатываются FormSubmit и направляются на почту. Сервис сообщает о хранении текстовых отправок до 30 дней. Локальный черновик доступен другим пользователям этого браузера: на общем компьютере очищайте его после работы.</p></div></dialog>
+
+  <dialog id="clear-dialog" aria-labelledby="clear-title"><div class="dialog-heading"><h2 id="clear-title">Очистить черновик?</h2><button type="button" class="icon-button" data-close aria-label="Отмена"><svg><use href="#i-close"/></svg></button></div><div class="dialog-body"><p>Все поля и выбранные скриншоты будут очищены. Сохранённый в этом браузере текст тоже будет удалён.</p></div><div class="dialog-actions"><button type="button" class="button button-secondary" data-close>Отмена</button><button type="button" class="button button-danger" id="confirm-clear">Очистить</button></div></dialog>
+  <div class="toast" id="toast" role="status" hidden></div>
+</body>
+</html>

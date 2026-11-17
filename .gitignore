@@ -1,0 +1,6 @@
+.qoder/
+node_modules/
+.env
+.env.*
+*.log
+.test-artifacts/
