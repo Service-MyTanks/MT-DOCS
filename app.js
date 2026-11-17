@@ -2,15 +2,11 @@
 
 const form = document.querySelector("#report-form");
 const draftKey = "mt-docs-draft-v1";
-const fieldIds = ["report-date", "nickname", "position", "online-minutes", "report-count", "game-work", "community-work", "forum-work", "key-skills", "links"];
-const fileInputs = [...form.querySelectorAll('input[type="file"]')];
-const maxUploadSize = 10_000_000;
-const allowedImageTypes = ["image/png", "image/jpeg", "image/webp"];
+const fieldIds = ["report-date", "nickname", "position", "online-minutes", "report-count", "screenshot-1", "screenshot-2", "screenshot-3", "game-work", "community-work", "forum-work", "key-skills", "links"];
 const previewDialog = document.querySelector("#preview-dialog");
 const confirmSend = document.querySelector("#confirm-send");
 const today = new Date();
 const localDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
-const previewUrls = new Map();
 let saveTimer;
 let toastTimer;
 let submitting = false;
@@ -18,8 +14,14 @@ let templatePreview = false;
 
 const field = (id) => document.getElementById(id);
 const value = (id) => field(id).value.trim();
-const selectedFiles = () => fileInputs.flatMap((input) => [...input.files]);
-
+function isHttpUrl(link) {
+  try {
+    const url = new URL(link);
+    return /^https?:\/\//i.test(link) && ["http:", "https:"].includes(url.protocol) && Boolean(url.hostname) && !/\s/.test(link);
+  } catch {
+    return false;
+  }
+}
 field("report-date").value = localDate;
 field("report-date").max = localDate;
 
@@ -59,7 +61,7 @@ function restoreDraft() {
       if (input instanceof HTMLSelectElement && input.selectedIndex === -1) input.value = "";
     }
     setDraftStatus("Черновик восстановлен");
-    showToast("Текст восстановлен. Выберите 3 скриншота заново.");
+    showToast("Черновик восстановлен.");
   } catch {
     setDraftStatus("Не удалось прочитать черновик");
   }
@@ -78,7 +80,7 @@ function formatDate(date) {
 function reportText(template = false) {
   const data = (id, placeholder) => template ? placeholder : value(id) || placeholder;
   const list = (id, placeholder, empty) => template ? placeholder : numberedList(value(id), empty);
-  const files = template ? "[3 скриншота]" : selectedFiles().length ? selectedFiles().map((file, index) => `${index + 1}. ${file.name}`).join("\n") : "[Прикрепите 3 скриншота]";
+  const screenshots = template ? "1. [Ссылка на скриншот 1]\n2. [Ссылка на скриншот 2]\n3. [Ссылка на скриншот 3]" : [1, 2, 3].map((number) => `${number}. ${value(`screenshot-${number}`)}`).join("\n");
   return [
     "ЕЖЕДНЕВНЫЙ ОТЧЁТ · MYTANKS",
     "",
@@ -86,7 +88,7 @@ function reportText(template = false) {
     `2. Ваш ник: ${data("nickname", "[Игровой никнейм]")}`,
     `3. Должность: ${data("position", "[Ваша должность]")}`,
     `4. Минуты онлайна: ${data("online-minutes", "[Минуты]")}`,
-    `Скриншоты (вложения):\n${files}`,
+    `Скриншоты (ссылки):\n${screenshots}`,
     `5. Кол-во ответов на репорты: ${data("report-count", "[Кол-во]")}`,
     "",
     "6. Проделанная работа:",
@@ -114,58 +116,15 @@ function validateFields() {
     const text = id === "game-work" || id === "key-skills" ? numberedList(input.value, "") : input.value.trim();
     input.setCustomValidity(input.value && !text ? "Введите текст, а не только пробелы или номера пунктов." : "");
   }
-  const links = value("links").split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
-  const invalidLink = links.find((link) => {
-    try {
-      const url = new URL(link);
-      return !/^https?:\/\//i.test(link) || !["http:", "https:"].includes(url.protocol) || !url.hostname || Boolean(url.username || url.password) || /\s/.test(link);
-    } catch {
-      return true;
-    }
-  });
-  field("links").setCustomValidity(invalidLink ? "Укажите по одной полной ссылке http:// или https:// на строку, без пробелов и данных для входа." : "");
-  validateFiles();
-}
-
-function validateFiles() {
-  const files = selectedFiles();
-  let error = "";
-  for (const input of fileInputs) {
-    const file = input.files[0];
-    const invalidType = file && !allowedImageTypes.includes(file.type);
-    const emptyFile = file && file.size === 0;
-    const message = invalidType ? "Разрешены только изображения PNG, JPG и WebP." : emptyFile ? "Пустой файл нельзя отправить. Выберите изображение." : "";
-    input.setCustomValidity(message);
-    if (message) error = message;
-  }
-  const total = files.reduce((sum, file) => sum + file.size, 0);
-  if (total > maxUploadSize) {
-    error = "Скриншоты занимают больше 10 МБ. Уменьшите изображения или выберите другие файлы.";
-    for (const input of fileInputs) if (input.files.length) input.setCustomValidity(error);
-  }
-  field("file-error").textContent = error;
-  field("file-error").hidden = !error;
-  field("file-total").textContent = `${files.length} из 3 · ${files.length ? `${(total / 1_000_000).toLocaleString("ru-RU", { maximumFractionDigits: 2 })} / 10 МБ` : "до 10 МБ всего"}`;
-}
-
-function refreshFilePreview(input) {
-  const slot = input.closest(".upload-slot");
-  const image = slot.querySelector("img");
-  const caption = slot.querySelector(".file-caption");
-  const oldUrl = previewUrls.get(input.id);
-  if (oldUrl) URL.revokeObjectURL(oldUrl);
-  previewUrls.delete(input.id);
-  image.hidden = true;
-  image.removeAttribute("src");
-  const file = input.files[0];
-  caption.hidden = !file;
-  caption.querySelector("span").textContent = file ? file.name : "";
-  if (file && allowedImageTypes.includes(file.type) && file.size > 0 && file.size <= maxUploadSize) {
-    const url = URL.createObjectURL(file);
-    previewUrls.set(input.id, url);
-    image.src = url;
-    image.hidden = false;
-  }
+  const screenshotIds = ["screenshot-1", "screenshot-2", "screenshot-3"];
+  const invalidScreenshot = screenshotIds.find((id) => !isHttpUrl(value(id)));
+  for (const id of screenshotIds) field(id).setCustomValidity(isHttpUrl(value(id)) ? "" : "Укажите полную ссылку, начинающуюся с https:// или http://.");
+  const extraLinks = value("links").split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+  const invalidExtraLink = extraLinks.find((link) => !isHttpUrl(link));
+  field("links").setCustomValidity(invalidExtraLink ? "Укажите по одной полной ссылке http:// или https:// на строку, без пробелов." : "");
+  const linkError = invalidScreenshot ? "Проверьте ссылки на скриншоты: нужны полные адреса http:// или https://." : invalidExtraLink ? "Проверьте дополнительные ссылки: укажите полные адреса http:// или https://." : "";
+  field("file-error").textContent = linkError;
+  field("file-error").hidden = !linkError;
 }
 
 function updateProgress() {
@@ -198,12 +157,22 @@ function updateProgress() {
 function openPreview({ ready = false, template = false } = {}) {
   templatePreview = template;
   field("preview-title").textContent = template ? "Шаблон ежедневного отчёта" : "Ваш ежедневный отчёт";
-  field("preview-description").textContent = template ? "Все 8 пунктов исходного шаблона. Каждый список нумеруется автоматически." : "Так будет выглядеть текст отчёта. Скриншоты отправятся вложениями.";
+  field("preview-description").textContent = template ? "Все 8 пунктов исходного шаблона. Каждый список нумеруется автоматически." : "Так будет выглядеть отчёт и ссылки на скриншоты.";
   field("preview-text").textContent = reportText(template);
-  const chips = template ? [] : selectedFiles().map((file) => {
+  const chips = template ? [] : [1, 2, 3].map((number) => {
     const chip = document.createElement("span");
     chip.className = "attachment-chip";
-    chip.textContent = file.name;
+    const url = value(`screenshot-${number}`);
+    if (isHttpUrl(url)) {
+      const link = document.createElement("a");
+      link.href = url;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.textContent = `Скриншот ${number}`;
+      chip.append(link);
+    } else {
+      chip.textContent = `Ссылка ${number} не указана`;
+    }
     return chip;
   });
   field("preview-attachments").replaceChildren(...chips);
@@ -224,21 +193,6 @@ form.addEventListener("input", (event) => {
   }
 });
 
-for (const input of fileInputs) {
-  input.addEventListener("change", () => {
-    refreshFilePreview(input);
-    validateFields();
-    updateProgress();
-  });
-  input.closest(".upload-slot").querySelector(".file-caption button").addEventListener("click", () => {
-    input.value = "";
-    refreshFilePreview(input);
-    validateFields();
-    updateProgress();
-    input.focus();
-  });
-}
-
 form.addEventListener("submit", (event) => {
   event.preventDefault();
   validateFields();
@@ -251,12 +205,12 @@ form.addEventListener("submit", (event) => {
 function setSubmitting(active) {
   submitting = active;
   confirmSend.disabled = active;
-  confirmSend.textContent = active ? "Отправляем отчёт…" : "Отправить AJAX";
+  confirmSend.textContent = active ? "Переходим к отправке…" : "Отправить отчёт";
   previewDialog.setAttribute("aria-busy", String(active));
   previewDialog.querySelector("[data-close]").disabled = active;
 }
 
-confirmSend.addEventListener("click", async () => {
+confirmSend.addEventListener("click", () => {
   if (submitting) return;
   validateFields();
   if (!form.checkValidity()) {
@@ -265,45 +219,17 @@ confirmSend.addEventListener("click", async () => {
     return;
   }
   saveDraft();
-  field("email-subject").value = `MT DOCS | ${value("nickname").replace(/[\r\n]/g, " ")} | ${formatDate(value("report-date"))}`;
-  field("report-body").value = reportText();
-  field("send-error").hidden = true;
-  setSubmitting(true);
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 60_000);
-  let failureMessage = "Не удалось получить подтверждение от FormSubmit. Статус отправки неизвестен.";
-  try {
-    const payload = Object.fromEntries(new FormData(form).entries());
-    for (const input of fileInputs) delete payload[input.name];
-    payload.message += `\n\nСкриншоты выбраны, но не переданы через AJAX: ${selectedFiles().map((file) => file.name).join(", ")}`;
-    const response = await fetch("https://formsubmit.co/ajax/supportmytanks@gmail.com", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify(payload),
-      credentials: "omit",
-      signal: controller.signal,
-    });
-    if (!response.ok) {
-      failureMessage = `FormSubmit вернул ошибку HTTP ${response.status}. Приём отчёта не подтверждён.`;
-      throw new Error("HTTP error");
-    }
-    const result = await response.json();
-    if (!result || (result.success !== true && result.success !== "true")) {
-      const detail = typeof result?.message === "string" ? result.message.slice(0, 500) : "Неизвестный ответ сервиса.";
-      failureMessage = `FormSubmit не подтвердил приём отчёта. Ответ сервиса: ${detail}`;
-      throw new Error("Submission not accepted");
-    }
-    previewDialog.close();
-    window.location.assign(new URL("./thanks.html", window.location.href).href);
-  } catch {
-    setSubmitting(false);
+  if (field("staticforms-api-key").value === "YOUR_STATIC_FORMS_API_KEY") {
     const error = field("send-error");
-    error.textContent = `${failureMessage} Проверьте почту, прежде чем повторять отправку.`;
+    error.textContent = "Static Forms ещё не подключён. Добавьте API key формы и укажите получателя в разделе Delivery.";
     error.hidden = false;
     error.scrollIntoView({ block: "nearest" });
-  } finally {
-    clearTimeout(timeout);
+    return;
   }
+  field("email-subject").value = `MT DOCS | ${value("nickname").replace(/[\r\n]/g, " ")} | ${formatDate(value("report-date"))}`;
+  field("report-body").value = reportText();
+  setSubmitting(true);
+  HTMLFormElement.prototype.submit.call(form);
 });
 
 previewDialog.addEventListener("cancel", (event) => {
@@ -355,7 +281,6 @@ field("confirm-clear").addEventListener("click", () => {
   try { localStorage.removeItem(draftKey); } catch { removed = false; }
   form.reset();
   field("report-date").value = localDate;
-  for (const input of fileInputs) refreshFilePreview(input);
   validateFields();
   updateProgress();
   setDraftStatus(removed ? "Новый черновик" : "Хранилище недоступно");
