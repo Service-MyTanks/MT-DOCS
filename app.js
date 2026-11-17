@@ -22,7 +22,6 @@ const selectedFiles = () => fileInputs.flatMap((input) => [...input.files]);
 
 field("report-date").value = localDate;
 field("report-date").max = localDate;
-field("next-url").value = "https://usersoft-inc.github.io/MT-DOCS/thanks.html";
 
 function showToast(message) {
   const toast = field("toast");
@@ -252,12 +251,12 @@ form.addEventListener("submit", (event) => {
 function setSubmitting(active) {
   submitting = active;
   confirmSend.disabled = active;
-  confirmSend.textContent = active ? "Отправляем отчёт…" : "Отправить отчёт";
+  confirmSend.textContent = active ? "Отправляем отчёт…" : "Отправить AJAX";
   previewDialog.setAttribute("aria-busy", String(active));
   previewDialog.querySelector("[data-close]").disabled = active;
 }
 
-confirmSend.addEventListener("click", () => {
+confirmSend.addEventListener("click", async () => {
   if (submitting) return;
   validateFields();
   if (!form.checkValidity()) {
@@ -268,8 +267,43 @@ confirmSend.addEventListener("click", () => {
   saveDraft();
   field("email-subject").value = `MT DOCS | ${value("nickname").replace(/[\r\n]/g, " ")} | ${formatDate(value("report-date"))}`;
   field("report-body").value = reportText();
+  field("send-error").hidden = true;
   setSubmitting(true);
-  HTMLFormElement.prototype.submit.call(form);
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 60_000);
+  let failureMessage = "Не удалось получить подтверждение от FormSubmit. Статус отправки неизвестен.";
+  try {
+    const payload = Object.fromEntries(new FormData(form).entries());
+    for (const input of fileInputs) delete payload[input.name];
+    payload.message += `\n\nСкриншоты выбраны, но не переданы через AJAX: ${selectedFiles().map((file) => file.name).join(", ")}`;
+    const response = await fetch("https://formsubmit.co/ajax/supportmytanks@gmail.com", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify(payload),
+      credentials: "omit",
+      signal: controller.signal,
+    });
+    if (!response.ok) {
+      failureMessage = `FormSubmit вернул ошибку HTTP ${response.status}. Приём отчёта не подтверждён.`;
+      throw new Error("HTTP error");
+    }
+    const result = await response.json();
+    if (!result || (result.success !== true && result.success !== "true")) {
+      const detail = typeof result?.message === "string" ? result.message.slice(0, 500) : "Неизвестный ответ сервиса.";
+      failureMessage = `FormSubmit не подтвердил приём отчёта. Ответ сервиса: ${detail}`;
+      throw new Error("Submission not accepted");
+    }
+    previewDialog.close();
+    window.location.assign(new URL("./thanks.html", window.location.href).href);
+  } catch {
+    setSubmitting(false);
+    const error = field("send-error");
+    error.textContent = `${failureMessage} Проверьте почту, прежде чем повторять отправку.`;
+    error.hidden = false;
+    error.scrollIntoView({ block: "nearest" });
+  } finally {
+    clearTimeout(timeout);
+  }
 });
 
 previewDialog.addEventListener("cancel", (event) => {
