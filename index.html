@@ -9,8 +9,8 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' blob:; style-src 'self'; script-src 'self'; connect-src 'none'; form-action https://api.staticforms.dev; base-uri 'self'; object-src 'none'">
   <title>Новый отчёт · MT DOCS</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./styles.css?v=12">
-  <script src="./app.js?v=11" defer></script>
+  <link rel="stylesheet" href="./styles.css?v=13">
+  <script src="./app.js?v=12" defer></script>
 </head>
 <body>
   <svg class="svg-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
@@ -143,6 +143,8 @@
       <footer class="page-footer"><span>MT DOCS <span class="footer-dot">·</span> Для тех, кто делает проект лучше.</span><span>MYTANKS TEAM</span></footer>
     </main>
   </div>
+
+  <dialog id="service-warning" aria-labelledby="service-warning-title" class="service-warning"><div class="dialog-heading"><div><span class="eyebrow">СЛУЖЕБНОЕ ПРЕДУПРЕЖДЕНИЕ</span><h2 id="service-warning-title">Внимание</h2></div><span class="service-warning-mark" aria-hidden="true">!</span></div><div class="dialog-body"><p class="service-warning-copy">Данный сайт является служебный. Слив данных, скриншотов, текста и так далее карается перманентным снятием с должности. Используйте сервис по прямому назначению. Только для отчётности!</p></div><div class="dialog-actions"><button type="button" class="button button-primary" data-close>Понятно, перейти к отчёту</button></div></dialog>
 
   <dialog id="preview-dialog" aria-labelledby="preview-title"><div class="dialog-heading"><div><span class="eyebrow">ПЕРЕД ОТПРАВКОЙ</span><h2 id="preview-title">Ваш ежедневный отчёт</h2></div><button type="button" class="icon-button" data-close aria-label="Закрыть предпросмотр"><svg><use href="#i-close"/></svg></button></div><div class="dialog-body"><p class="dialog-description" id="preview-description">Так будет выглядеть отчёт и три ссылки на скриншоты.</p><pre id="preview-text"></pre><div class="preview-attachments" id="preview-attachments"></div><p class="notice compact" id="send-notice">После подтверждения отчёт будет передан Static Forms обычной POST-формой.</p><p class="field-error" id="send-error" role="alert" hidden></p></div><div class="dialog-actions"><button type="button" class="button button-secondary" id="download-report"><svg><use href="#i-download"/></svg>Скачать .txt</button><button type="button" class="button button-primary" id="confirm-send">Перейти к отправке<svg><use href="#i-arrow"/></svg></button><button type="button" class="button button-primary" id="back-to-form" data-close hidden>Продолжить заполнение</button></div></dialog>
 

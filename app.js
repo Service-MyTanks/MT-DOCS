@@ -295,3 +295,4 @@ field("confirm-clear").addEventListener("click", () => {
 restoreDraft();
 validateFields();
 updateProgress();
+field("service-warning").showModal();

@@ -35,3 +35,16 @@ body[data-new-year-theme="TRUE"] .intro-icon,body[data-new-year-theme="TRUE"] .s
 body[data-new-year-theme="TRUE"] .button-primary{box-shadow:inset 0 0 0 1px #f1d69a}
 @keyframes new-year-snow{to{background-position:0 240px,0 480px,0 360px,0 600px}}
 @media(prefers-reduced-motion:reduce){body[data-new-year-theme="TRUE"]::after{animation:none}}
+
+#service-warning{width:min(540px,calc(100% - 32px));border-color:#74363b;background:#21191c;box-shadow:0 24px 100px #000a,0 0 0 1px #51292e;color:var(--text)}
+#service-warning::backdrop{background:#09070acc;backdrop-filter:blur(6px)}
+#service-warning .dialog-heading{border-color:#51292e;background:linear-gradient(110deg,#351f24,#21191c 78%)}
+#service-warning .eyebrow{color:#ff8c83}
+#service-warning h2{margin:8px 0 0;color:#fff0ed;font-size:23px;font-weight:650}
+.service-warning-mark{display:grid;place-items:center;width:40px;height:40px;border:1px solid #a94c51;border-radius:50%;background:#51272d;color:#ffaaa3;font-size:26px;font-weight:750}
+#service-warning .dialog-body{padding-top:22px;padding-bottom:22px}
+.service-warning-copy{margin:0;color:#f1dada;font-size:15px;line-height:1.8}
+#service-warning .dialog-actions{justify-content:flex-end;border-color:#51292e}
+#service-warning .button-primary{background:#b94e53;border-color:#d06468;color:#fff;font-size:12px}
+#service-warning .button-primary:hover{background:#ce5c61}
+@media(max-width:560px){#service-warning .dialog-heading{padding:20px}.service-warning-copy{font-size:14px;line-height:1.7}#service-warning .dialog-actions{padding:16px 20px}#service-warning .button-primary{width:100%;white-space:normal}}
