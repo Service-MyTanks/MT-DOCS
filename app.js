@@ -228,8 +228,8 @@ confirmSend.addEventListener("click", () => {
   }
   field("email-subject").value = `MT DOCS | ${value("nickname").replace(/[\r\n]/g, " ")} | ${formatDate(value("report-date"))}`;
   field("report-body").value = reportText();
-  setSubmitting(true);
   HTMLFormElement.prototype.submit.call(form);
+  window.location.assign(field("staticforms-redirect").value);
 });
 
 previewDialog.addEventListener("cancel", (event) => {
