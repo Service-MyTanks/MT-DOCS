@@ -8,7 +8,7 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' blob:; style-src 'self'; script-src 'self'; connect-src 'none'; form-action https://api.staticforms.dev; base-uri 'self'; object-src 'none'">
   <title>Новый отчёт · MT DOCS</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./styles.css?v=6">
+  <link rel="stylesheet" href="./styles.css?v=7">
   <script src="./app.js?v=6" defer></script>
 </head>
 <body>
@@ -55,7 +55,7 @@
         <form id="report-form" action="https://api.staticforms.dev/submit" method="POST">
           <input type="hidden" name="apiKey" id="staticforms-api-key" value="sf_aca3770697761941dfd1a6f2">
           <input type="hidden" name="redirectTo" value="https://usersoft-inc.github.io/MT-DOCS/thanks.html" id="staticforms-redirect">
-          <input type="text" name="honeypot" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <input type="text" name="honeypot" hidden tabindex="-1" autocomplete="off" aria-hidden="true">
           <input type="hidden" name="subject" id="email-subject" value="MT DOCS — ежедневный отчёт">
           <input type="hidden" name="message" id="report-body">
 
