@@ -18,7 +18,7 @@ input[type=date]{width:100%;min-width:0;max-width:100%}
 @media(max-width:720px){.field-row{grid-template-columns:minmax(0,1fr);gap:0}}
 @media(max-width:480px){.success-actions{display:grid;grid-template-columns:minmax(0,1fr)}.success-actions>*{width:100%}.success-actions .button{width:100%}}
 
-@media(max-width:720px){.form-card,.card-body,.field-row,.field-row>.field{min-width:0;max-width:100%}input[type=date]{display:block;box-sizing:border-box;width:100%;min-width:0;max-width:100%;height:68px;min-height:68px;padding-block:16px;appearance:none;-webkit-appearance:none;font-size:16px;line-height:1.25}input[type=date]::-webkit-date-and-time-value{width:100%;min-width:0;min-height:32px;text-align:left}}
+@media(max-width:720px){.form-card,.card-body,.field-row,.field-row>.field{min-width:0;max-width:100%}input[type=date]{display:block;box-sizing:border-box;width:100%;min-width:0;max-width:100%;appearance:none;-webkit-appearance:none;font-size:16px}input[type=date]::-webkit-date-and-time-value{width:100%;min-width:0;text-align:left}}
 
 .delivery-animation{position:relative;display:flex;align-items:center;justify-content:space-between;width:min(280px,100%);height:64px;margin:0 0 25px}
 .delivery-endpoint{position:relative;z-index:1;display:grid;place-items:center;width:54px;height:54px;border:1px solid #51452f;border-radius:14px;background:#29291f;color:var(--accent)}
